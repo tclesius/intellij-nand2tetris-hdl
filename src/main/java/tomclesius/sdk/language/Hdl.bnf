@@ -1,0 +1,20 @@
+{
+  parserClass="tomclesius.sdk.language.parser.HdlParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Hdl"
+  psiImplClassSuffix="Impl"
+  psiPackage="tomclesius.sdk.language.psi"
+  psiImplPackage="tomclesius.sdk.language.psi.impl"
+
+  elementTypeHolderClass="tomclesius.sdk.language.psi.HdlTypes"
+  elementTypeClass="tomclesius.sdk.language.psi.HdlElementType"
+  tokenTypeClass="tomclesius.sdk.language.psi.HdlTokenType"
+}
+
+simpleFile ::= item_*
+//TODO Definiere Grammatik
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY

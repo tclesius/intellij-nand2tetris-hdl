@@ -1,7 +1,7 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
-    <id>com.example.intellij-nand2tetris-hdl</id>
+    <id>tomclesius.nand2tetris-hdl</id>
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
@@ -24,6 +24,14 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <fileType
+                name="HDL"
+                implementationClass="tomclesius.sdk.language.HdlFileType"
+                fieldName="INSTANCE"
+                language="HDL"
+                extensions="hdl"/>
+        <lang.parserDefinition
+                language="HDL"
+                implementationClass="tomclesius.sdk.language.HdlParserDefinition"/>
     </extensions>
 </idea-plugin>

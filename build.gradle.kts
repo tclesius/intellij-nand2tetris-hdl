@@ -14,7 +14,7 @@ repositories {
 intellij {
     version.set("2021.2")
     type.set("IC") // Target IDE Platform
-
+    sourceSets["main"].java.srcDirs("src/main/gen")
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 
