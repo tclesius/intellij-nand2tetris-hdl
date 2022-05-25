@@ -1,0 +1,1 @@
+rootProject.name = "intellij-nand2tetris-hdl"
