@@ -1,3 +1,5 @@
-# INTELLIJ HDL PLUGIN
 
 ![NAND2TETRIS HDML](.github/gitLogo.png)
+
+## Overview
+lorem ipsum...
