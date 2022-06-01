@@ -1,0 +1,3 @@
+# INTELLIJ HDL PLUGIN
+
+![NAND2TETRIS HDML](.github/PluginLogo.svg)
