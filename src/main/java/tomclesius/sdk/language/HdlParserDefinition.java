@@ -19,10 +19,9 @@ import org.jetbrains.annotations.NotNull;
 public class HdlParserDefinition implements ParserDefinition {
 
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS = TokenSet.create(HdlTypes.COMMENT);
+    public static final TokenSet COMMENTS = TokenSet.create(HdlTypes.LINE_COMMENT, HdlTypes.DOC_COMMENT);
 
     public static final IFileElementType FILE = new IFileElementType(HdlLanguage.INSTANCE);
-
 
     @Override
     public @NotNull Lexer createLexer(Project project) {
@@ -41,7 +40,6 @@ public class HdlParserDefinition implements ParserDefinition {
         return COMMENTS;
     }
 
-
     @Override
     public @NotNull TokenSet getStringLiteralElements() {
         return TokenSet.EMPTY;
@@ -54,17 +52,17 @@ public class HdlParserDefinition implements ParserDefinition {
     }
 
     @Override
-    public IFileElementType getFileNodeType() {
+    public @NotNull IFileElementType getFileNodeType() {
         return FILE;
     }
 
     @Override
-    public PsiFile createFile(FileViewProvider viewProvider) {
+    public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider) {
         return new HdlFile(viewProvider);
     }
 
     @Override
-    public SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
+    public @NotNull SpaceRequirements spaceExistenceTypeBetweenTokens(ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }
 

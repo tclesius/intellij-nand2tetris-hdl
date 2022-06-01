@@ -11,10 +11,26 @@
   elementTypeHolderClass="tomclesius.sdk.language.psi.HdlTypes"
   elementTypeClass="tomclesius.sdk.language.psi.HdlElementType"
   tokenTypeClass="tomclesius.sdk.language.psi.HdlTokenType"
+
+  psiImplUtilClass="tomclesius.sdk.language.psi.impl.HdlPsiImplUtil"
 }
 
-simpleFile ::= item_*
-//TODO Definiere Grammatik
-private item_ ::= (property|COMMENT|CRLF)
+HdlFile ::=  <chip> item* | item* <chip> | item*
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY
+//TODO flex doc genauer durchlesen
+item ::=  (LINE_COMMENT|DOC_COMMENT|CRLF)
+
+chip ::= {CHIP_KEYWORD VARIABLE chip_body}{
+        //mixin="tomclesius.sdk.language.psi.impl.HdlNamedElementImpl"
+        //implements="tomclesius.sdk.language.psi.HdlNamedElement"
+        //methods=[getChip getName setName getNameIdentifier]
+        }
+chip_body ::= {LBRACE input output parts RBRACE}
+private input ::=   {IN_KEYWORD  var_lvar {COMMA var_lvar} * SEMICOLON}
+private output ::=  {OUT_KEYWORD var_lvar {COMMA var_lvar} * SEMICOLON}
+private parts ::=   (PARTS_KEYWORD COLON (part SEMICOLON) * )
+private part ::=    {VARIABLE LPAREN param (COMMA param) * RPAREN}
+private param ::=   {VARIABLE EQUAL (LIST_VARIABLE | VARIABLE | BOOLEAN)}
+
+
+private var_lvar ::= (VARIABLE | LIST_VARIABLE)

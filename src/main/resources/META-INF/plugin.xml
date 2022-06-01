@@ -25,13 +25,25 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <fileType
-                name="HDL"
+                name="Hdl"
                 implementationClass="tomclesius.sdk.language.HdlFileType"
                 fieldName="INSTANCE"
-                language="HDL"
+                language="Hdl"
                 extensions="hdl"/>
         <lang.parserDefinition
-                language="HDL"
+                language="Hdl"
                 implementationClass="tomclesius.sdk.language.HdlParserDefinition"/>
+        <lang.syntaxHighlighterFactory
+                language="Hdl"
+                implementationClass="tomclesius.sdk.language.HdlSyntaxHighlighterFactory"/>
+        <colorSettingsPage
+                implementation="tomclesius.sdk.language.HdlColorSettingsPage"/>
+        <psi.referenceContributor
+                implementation="tomclesius.sdk.language.HdlReferenceContributor"/>
+        <defaultLiveTemplates file="/liveTemplates/Hdl.xml"/>
+        <liveTemplateContext implementation="tomclesius.sdk.language.HdlContext"/>
+
     </extensions>
+
+
 </idea-plugin>

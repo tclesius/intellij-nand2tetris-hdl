@@ -15,33 +15,55 @@ import com.intellij.psi.TokenType;
 %eof{  return;
 %eof}
 
+
+
 CRLF=\R
 WHITE_SPACE=[\ \n\t\f]
-FIRST_VALUE_CHARACTER=[^ \n\f\\] | "\\"{CRLF} | "\\".
-VALUE_CHARACTER=[^\n\f\\] | "\\"{CRLF} | "\\".
-END_OF_LINE_COMMENT=("// "|"!")[^\r\n]*
-MULTILINE_COMMENT=[ "/*", "*/" ]
-SEPARATOR=[:=]
-KEY_CHARACTER=[^:=\ \n\t\f\\] | "\\ "
+NUMBER= [\d]+
+BOOLEAN= ("true" | "false")
+LINE_COMMENT=("//").*
+DOC_COMMENT= \/[*]([^*]|([*][^\/]))*
+VARIABLE= [a-zA-Z0-9-]+
+CHIP_NAME= [a-zA-Z0-9-]+
+LIST_VARIABLE= [a-zA-Z]+\[[^\]]*\]
+
 
 %state WAITING_VALUE
 
 %%
 
-<YYINITIAL> {END_OF_LINE_COMMENT}                           { yybegin(YYINITIAL); return HdlTypes.COMMENT; }
 
-<YYINITIAL> {MULTILINE_COMMENT}                             { yybegin(YYINITIAL); return HdlTypes.COMMENT; }
 
-<YYINITIAL> {KEY_CHARACTER}+                                { yybegin(YYINITIAL); return HdlTypes.KEY; }
+<YYINITIAL>{
 
-<YYINITIAL> {SEPARATOR}                                     { yybegin(WAITING_VALUE); return HdlTypes.SEPARATOR; }
+    "{"                                             { yybegin(YYINITIAL); return HdlTypes.LBRACE; }
+    "}"                                             { yybegin(YYINITIAL); return HdlTypes.RBRACE; }
+    ":"                                             { yybegin(YYINITIAL); return HdlTypes.COLON; }
+    "="                                             { yybegin(YYINITIAL); return HdlTypes.EQUAL; }
+    "("                                             { yybegin(YYINITIAL); return HdlTypes.LPAREN; } // waiting value?
+    ")"                                             { yybegin(YYINITIAL); return HdlTypes.RPAREN; }
+    ","                                             { yybegin(YYINITIAL); return HdlTypes.COMMA; }
+    ";"                                             { yybegin(YYINITIAL); return HdlTypes.SEMICOLON; }
 
-<WAITING_VALUE> {CRLF}({CRLF}|{WHITE_SPACE})+               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-<WAITING_VALUE> {WHITE_SPACE}+                              { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE; }
+    "CHIP"                                          { yybegin(YYINITIAL); return HdlTypes.CHIP_KEYWORD; }
+    "PARTS"                                         { yybegin(YYINITIAL); return HdlTypes.PARTS_KEYWORD; }
+    "IN"                                            { yybegin(YYINITIAL); return HdlTypes.IN_KEYWORD; }
+    "OUT"                                           { yybegin(YYINITIAL); return HdlTypes.OUT_KEYWORD; }
 
-<WAITING_VALUE> {FIRST_VALUE_CHARACTER}{VALUE_CHARACTER}*   { yybegin(YYINITIAL); return HdlTypes.VALUE; }
 
-({CRLF}|{WHITE_SPACE})+                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
-[^]                                                         { return TokenType.BAD_CHARACTER; }
+    {LINE_COMMENT}                                  {return HdlTypes.LINE_COMMENT; }
+    {DOC_COMMENT}                                   { yybegin(WAITING_VALUE); return HdlTypes.DOC_COMMENT;}
+    {BOOLEAN}                                       { yybegin(YYINITIAL); return HdlTypes.BOOLEAN; }
+    {LIST_VARIABLE}                                 { yybegin(YYINITIAL); return HdlTypes.LIST_VARIABLE; }
+    {VARIABLE}                                      { yybegin(YYINITIAL);return HdlTypes.VARIABLE; }
+}
+
+<WAITING_VALUE>{
+    {WHITE_SPACE}+                                  { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE; }
+    "*/"                                            { yybegin(YYINITIAL); return HdlTypes.DOC_COMMENT;}
+}
+
+({CRLF}|{WHITE_SPACE})+                             { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+[^]                                                 { return TokenType.BAD_CHARACTER; }

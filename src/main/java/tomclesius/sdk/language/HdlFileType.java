@@ -17,7 +17,7 @@ public class HdlFileType extends LanguageFileType {
     @NotNull
     @Override
     public String getName() {
-        return "HDL";
+        return "Hdl";
     }
 
     @NotNull

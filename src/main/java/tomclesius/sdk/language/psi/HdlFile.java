@@ -21,7 +21,7 @@ public class HdlFile extends PsiFileBase {
 
     @Override
     public String toString() {
-        return "HDL";
+        return "Hdl";
     }
 
 }
